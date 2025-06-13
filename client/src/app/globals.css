@@ -1,43 +1,94 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: var(--color-cloud);
+  --color-foreground: var(--color-graphite);
+
+  --color-graphite: #363636; /* Primary text color */
+  --color-smoke: #888888; /* Secondary text, placeholders, disabled */
+  --color-ash: #cfcfcf; /* Borders, dividers, inactive elements */
+  --color-silver: #e0e0e0; /* Light background hover, soft UI elements */
+  --color-mist: #ebebeb; /* Panel/card backgrounds */
+  --color-cloud: #f5f5f5; /* App background */
+  --color-ivory: #fdfcf9; /* Softest background highlight */
+  --color-roseRed: #9f0712; /* Accent / destructive actions */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+  html {
+    scrollbar-width: none;
+  }
+  body {
+    background: var(--color-cloud);
+    color: var(--color-graphite);
 
-  --color-graphite: #363636;
-  --color-smoke: #888888;
-  --color-ash: #d9d9d9;
-  --color-mist: #fafafa;
-  --color-silver: #d9d9d9;
-  --color-cloud: #f5f5f5;
-}
-
-button {
-  @apply cursor-pointer;
+    overflow-x: hidden;
+  }
 }
 
 @layer components {
   .rd-block {
     @apply bg-cloud rounded-[12px] px-[15px] py-[8px] shadow-[5px_5px_25px_rgba(0,0,0,0.1)];
   }
+
+  .parent:hover:has([class*="child"]:hover):hover {
+    background-color: transparent !important;
+  }
+  /* 
+  .parent:hover [class*="child"] {
+    background-color: #f8f8f8 !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  } */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f5f5f5;
-    --foreground: #363636;
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.dark {
+  --color-graphite: #e5e5e5; /* Primary text on dark bg */
+  --color-smoke: #999999; /* Secondary text / placeholders */
+  --color-ash: #444444; /* Borders / low-contrast dividers */
+  --color-silver: #666666; /* Hover / soft UI backgrounds */
+  --color-mist: #2c2c2c; /* Panel/card backgrounds */
+  --color-cloud: #1f1f1f; /* Main app background */
+  --color-ivory: #2a2a2a; /* Highlight background on dark */
+  --color-roseRed: #ff4d5a; /* Accent / destructive actions */
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #999;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+/* .tiptap:focus-within p.is-editor-empty:first-child::before {
+  content: "";
+} */
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  margin: 0.8rem 0;
+}
+
+.tiptap {
+  code::before,
+  code::after {
+    content: "";
+  }
+
+  p {
+    margin: 0 0 0.6rem 0;
+  }
+  /* p {
+    line-height: 1.6;
+  } */
 }

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Nunito } from "next/font/google";
+import { Geist, Geist_Mono, Merriweather, Nunito } from "next/font/google";
 import "./globals.css";
 import AppShell from "./AppShell";
+import { Toaster } from "react-hot-toast";
+import AppReady from "./AooReady";
 
 const nunito = Nunito({
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -18,9 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${nunito.className} antialiased`}>
-        <AppShell>{children}</AppShell>
+    <html lang="en" className="dark" id="rootHtml">
+      <body className={`${nunito.className} antialiased no-scrollbar`}>
+        <AppReady>
+          <Toaster position="bottom-center" />
+          <AppShell>{children}</AppShell>
+        </AppReady>
       </body>
     </html>
   );
