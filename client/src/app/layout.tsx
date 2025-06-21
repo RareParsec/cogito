@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Merriweather, Nunito } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import AppShell from "./AppShell";
 import { Toaster } from "react-hot-toast";
-import AppReady from "./AooReady";
+import AppReady from "./AppReady";
 
 const nunito = Nunito({
   subsets: ["latin"],

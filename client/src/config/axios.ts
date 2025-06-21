@@ -12,10 +12,13 @@ customAxios.interceptors.request.use(
     const ForceTokenRefresh = config.headers.ForceTokenRefresh || false;
     // console.log("refreshing token:", ForceTokenRefresh);
     const token = await auth.currentUser?.getIdToken(ForceTokenRefresh);
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const guestToken = localStorage.getItem("guest-token");
+    config.headers["x-guest-token"] = guestToken || null;
+
     return config;
   },
   (error) => {

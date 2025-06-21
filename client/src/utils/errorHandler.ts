@@ -1,15 +1,19 @@
-import toast, { ToastType } from "react-hot-toast";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
-const errorHandler = (error: any, toastId?: string) => {
+const errorHandler = (error: unknown, toastId?: string) => {
   console.log(error);
-  if (error.response) {
+
+  const err = error as AxiosError<{ message?: string | string[] }>;
+
+  if (err.response) {
     // NestJS/backend error
-    const message = error.response.data?.message || "Server error";
+    const message = err.response.data?.message || "Server error";
     toast.error(
       Array.isArray(message) ? message[0] : message,
       toastId ? { id: toastId } : undefined
     );
-  } else if (error.request) {
+  } else if (err.request) {
     // Request made, no response
     toast.error(
       "No response from server.",
@@ -18,7 +22,7 @@ const errorHandler = (error: any, toastId?: string) => {
   } else {
     // Axios setup issue or client-side failure
     toast.error(
-      "Request error: " + error.message,
+      "Request error: " + err.message,
       toastId ? { id: toastId } : undefined
     );
   }

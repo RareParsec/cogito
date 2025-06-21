@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -23,16 +23,16 @@ model User {
 }
 
 model Slate {
-  id   String @id @unique @default(cuid())
-  name String @db.VarChar(25)
-
+  id      String @id @unique @default(cuid())
+  name    String
   content Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String?
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  shared Boolean @default(false)
+  guestToken String? @unique
+  shared     Boolean @default(false)
 }

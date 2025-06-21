@@ -13,7 +13,6 @@ import { AuthService } from './auth.service';
 import { PrismaService } from 'src/common/prisma.service';
 import { AuthGuard } from 'src/common/auth.guard';
 
-console.log('AuthGuard is:', AuthGuard);
 @Controller('auth')
 @UseGuards(AuthGuard)
 export class AuthController {

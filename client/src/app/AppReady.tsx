@@ -6,49 +6,59 @@ import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FeatherIcon } from "@phosphor-icons/react";
-import { useRouter } from "next/navigation";
+import { useGlobalStore } from "@/utils/zustand/globalStore";
+import { useUserStore } from "@/utils/zustand/userStore";
+import customAxios from "@/config/axios";
+import errorHandler from "@/utils/errorHandler";
 
 function AppReady({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
-  //   const refreshUser = useUserStore((state) => state.refreshUser);
-  //   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
+
+  const setTheme = useGlobalStore((state) => state.setTheme);
+  const setUser = useUserStore((state) => state.setUser);
+  const clearUser = useUserStore((state) => state.clearUser);
 
   useEffect(() => {
+    const currentTheme = localStorage.getItem("theme");
+    setTheme(
+      currentTheme == "dark" || currentTheme == "light" ? currentTheme : "light"
+    );
+
     const unsub = onAuthStateChanged(auth, async () => {
-      console.log("ready");
-      //   await refreshUser()
-      //     .then(() => {
-      //       console.log("ready");
-      //       setReady(true);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //       router.push("/auth");
-      //     });
-      setReady(true);
+      if (!auth.currentUser) clearUser();
+
+      setUser(auth?.currentUser?.uid || null, auth?.currentUser?.email || null);
+
+      if (auth.currentUser) {
+        const guestToken = localStorage.getItem("guest-token");
+
+        if (guestToken) {
+          try {
+            await customAxios.post(
+              "/slate/transfer-guest-slate",
+              {},
+              {
+                headers: {
+                  ForceTokenRefresh: "true",
+                },
+              }
+            );
+
+            localStorage.removeItem("guest-token");
+          } catch (e) {
+            errorHandler(e);
+          }
+        }
+      }
+
+      setTimeout(() => {
+        setReady(true);
+      }, 1000);
     });
-    // const checkDevice = () => {
-    //   setIsMobile(window.innerWidth <= 768);
-    // };
-    // checkDevice();
-    // window.addEventListener("resize", checkDevice);
     return () => {
       unsub();
-      //   window.removeEventListener("resize", checkDevice);
     };
   }, []);
-
-  // if (isMobile) {
-  //   return (
-  //     <AnimatePresence>
-  //       <div className="w-screen h-screen flex flex-col items-center justify-center">
-  //         <Feather size={40} color="var(--color-deepBeaver)" />
-  //         <div className=" text-beaver italic">This application in only currently available on desktop :&#40;</div>
-  //       </div>
-  //     </AnimatePresence>
-  //   );
-  // }
 
   if (!ready) {
     return (

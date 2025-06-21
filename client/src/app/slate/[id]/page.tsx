@@ -6,31 +6,33 @@ import { useParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { Content } from "@tiptap/react";
 import { debounce } from "lodash";
+import { useGlobalStore } from "@/utils/zustand/globalStore";
+import { AxiosError } from "axios";
 
 function Slate() {
   const [initialState, setInitialState] = useState<Slate | null>(null);
-  const params = useParams();
+  const [content, setContent] = useState<Content | null>(null);
+  const [allowContentUpdates, setAllowContentUpdates] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [content, setContent] = useState<Content | null>(null);
+  const wordCountShown = useGlobalStore((state) => state.wordCountShown);
 
-  const [allowContentUpdates, setAllowContentUpdates] = useState(false);
-
-  const [error, setError] = useState<string | null>(null);
+  const params = useParams();
 
   const saveContent = useCallback(
     debounce(async (contentToSave: Content) => {
-      console.log("Debounced save with latest content:", contentToSave);
       try {
         await customAxios.post(`/slate/${params.id}`, {
           content: contentToSave,
         });
       } catch (e) {
         errorHandler(e);
-        console.error("Failed to save content:", e);
+        console.log("Failed to save content:", e);
       }
     }, 1000),
-    [params.id] // Dependencies for useCallback
+    [params.id]
   );
 
   useEffect(() => {
@@ -41,45 +43,83 @@ function Slate() {
 
         setInitialState(slate);
         setContent(slate.content);
-        setAllowContentUpdates(true);
-      } catch (e: any) {
-        console.error("Error fetching slate:", e.response?.status);
-        if (e.response?.status === 404) {
-          return setError("slate not found :(");
-        } else {
-          setError(e.response.data?.message || "Server error");
-        }
 
-        errorHandler(e);
+        setAllowContentUpdates(true);
+      } catch (e: unknown) {
+        const err = e as AxiosError<{ message?: string }>;
+
+        if (err.response?.status === 404) {
+          setError("404");
+        } else {
+          setError(err.response?.data?.message || "Server error...");
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchSlate();
-  }, []);
+  }, [params.id]);
 
   useEffect(() => {
-    if (!allowContentUpdates || content == null) return;
+    if (!allowContentUpdates) return;
 
     saveContent(content);
   }, [content, allowContentUpdates, saveContent]);
 
-  if (loading || error) {
+  if (loading) {
     return (
-      <div className="flex no-scrollbar items-center mt-24">
-        {loading && <p className="text-gray-500">Loading...</p>}
-        {error && <p className="text-red-500 text-center">{error}</p>}
+      <div className="flex flex-col w-full items-center mt-24">
+        <div className="flex flex-row items-end justify-center gap-1">
+          <span className="font-medium">Loading</span>
+          <div className="flex gap-1 mb-[5px]">
+            <div className="w-1 h-1 bg-graphite rounded-full animate-bounce"></div>
+            <div
+              className="w-1 h-1 bg-graphite rounded-full animate-bounce"
+              style={{ animationDelay: "0.1s" }}
+            />
+            <div
+              className="w-1 h-1 bg-graphite rounded-full animate-bounce"
+              style={{ animationDelay: "0.2s" }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error == "404") {
+    return (
+      <div className="flex flex-col items-center mt-24">
+        <div className="text-2xl font-bold text-roseRed">404</div>
+        <div className="text-md text-graphite">Slate not found...</div>
+        <div className="text-sm text-gray-500 mt-3"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col w-full items-center mt-24 px-[10%] text-center">
+        <div className="text-roseRed font-medium">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col no-scrollbar h-full">
+    <div className="relative flex flex-col h-full">
       <Tiptap
         content={initialState?.content || ""}
-        className={`prose h-full outline-none leading-snug no-scrollbar text-graphite`}
+        className={`min-w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar`}
         setValue={setContent}
+        setWordCount={setWordCount}
       />
+      <div
+        className={`absolute bottom-0 right-0 mb-2 flex flex-row px-4 text-smoke text-sm justify-end pb-1 ${
+          wordCountShown ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="flex flex-col">{wordCount} words</div>
+      </div>
     </div>
   );
 }

@@ -16,31 +16,42 @@ export class AuthService {
 
   async continueWithGoogle(user: DecodedIdToken) {
     try {
-      const foundUser = await this.prisma.user.findFirst({
-        where: {
-          id: user.uid,
-        },
+      const userToReturn = await this.prisma.$transaction(async (tx) => {
+        const userKey = parseInt(
+          user.uid.replace(/[^a-zA-Z0-9]/g, '').slice(0, 12),
+          36,
+        );
+
+        await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(${userKey})`);
+
+        const foundUser = await this.prisma.user.findFirst({
+          where: {
+            id: user.uid,
+          },
+        });
+
+        if (foundUser) {
+          return foundUser;
+        } else {
+          return await this.createUser(user, tx);
+        }
       });
 
-      if (foundUser) {
-        // return await this.signIn(user);
-        return foundUser;
-      } else {
-        return await this.createUser(user);
-      }
+      return userToReturn;
     } catch (error) {
+      console.log(error);
       if (error instanceof HttpException) throw error;
-      throw new InternalServerErrorException('Error signing in with Google...');
+      throw new InternalServerErrorException('Trouble signing in. Try again?');
     }
   }
 
-  private async createUser(user: DecodedIdToken) {
+  private async createUser(user: DecodedIdToken, tx: Prisma.TransactionClient) {
     try {
       if (!user.email) {
-        throw new BadRequestException('Email is required to create a user.');
+        throw new BadRequestException('Please provide an email to continue!');
       }
 
-      const createdUser = await this.prisma.user.create({
+      const createdUser = await tx.user.create({
         data: {
           id: user.uid,
           email: user.email,
@@ -49,8 +60,11 @@ export class AuthService {
 
       return createdUser;
     } catch (error) {
+      console.log(error);
       if (error instanceof HttpException) throw error;
-      throw new InternalServerErrorException('Error creating user...');
+      throw new InternalServerErrorException(
+        'Trouble creating account. Try again?',
+      );
     }
   }
 
@@ -59,11 +73,9 @@ export class AuthService {
   //     const foundUser = await this.prisma.user.findUnique({
   //       where: { id: user.uid },
   //     });
-
   //     if (!foundUser) {
   //       throw new NotFoundException('User not found...');
   //     }
-
   //     return foundUser;
   //   } catch (error) {
   //     if (error instanceof HttpException) throw error;
