@@ -59,7 +59,7 @@ const ShareModal = ({ close }: { close: () => void }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 bg-[#3a3a52]/40 backdrop-blur-[3px] flex items-center justify-center z-100"
+      className="fixed inset-0 bg-[#3a3a52]/40 max-md:bg-[#3a3a52]/10 backdrop-blur-[3px] flex items-center justify-center z-100"
       onClick={close}
     >
       <motion.div

@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" id="rootHtml">
+    <html lang="en" className="dark" id="rootHtml" suppressHydrationWarning>
       <body className={`${nunito.className} antialiased no-scrollbar`}>
         <AppReady>
           <Toaster position="bottom-center" />

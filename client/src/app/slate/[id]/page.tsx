@@ -16,8 +16,15 @@ function Slate() {
   const [wordCount, setWordCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const wordCountShown = useGlobalStore((state) => state.wordCountShown);
+  const setLatestUpdatedSlateId = useGlobalStore(
+    (state) => state.setLatestUpdatedSlateId
+  );
+  const latestUpdatedSlateId = useGlobalStore(
+    (state) => state.latestUpdatedSlateId
+  );
 
   const params = useParams();
 
@@ -31,9 +38,44 @@ function Slate() {
         errorHandler(e);
         console.log("Failed to save content:", e);
       }
-    }, 1000),
+    }, 300),
     [params.id]
   );
+
+  useEffect(() => {
+    const handleVisualViewportChange = () => {
+      if (window.visualViewport) {
+        const keyboardHeight =
+          window.innerHeight - window.visualViewport.height;
+        setKeyboardHeight(keyboardHeight);
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener(
+        "resize",
+        handleVisualViewportChange
+      );
+      return () => {
+        window.visualViewport?.removeEventListener(
+          "resize",
+          handleVisualViewportChange
+        );
+      };
+    }
+
+    const handleResize = () => {
+      const heightDiff = window.screen.height - window.innerHeight;
+      if (heightDiff > 150) {
+        setKeyboardHeight(heightDiff);
+      } else {
+        setKeyboardHeight(0);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchSlate = async () => {
@@ -42,7 +84,6 @@ function Slate() {
         const { data: slate } = res;
 
         setInitialState(slate);
-        setContent(slate.content);
 
         setAllowContentUpdates(true);
       } catch (e: unknown) {
@@ -61,9 +102,14 @@ function Slate() {
   }, [params.id]);
 
   useEffect(() => {
-    if (!allowContentUpdates) return;
+    if (!allowContentUpdates || content === null) return;
 
     saveContent(content);
+
+    console.log(content);
+    if (latestUpdatedSlateId !== params.id) {
+      setLatestUpdatedSlateId((params.id as string) || null);
+    }
   }, [content, allowContentUpdates, saveContent]);
 
   if (loading) {
@@ -106,10 +152,16 @@ function Slate() {
   }
 
   return (
-    <div className="relative flex flex-col h-full">
+    <div
+      className="relative flex flex-col h-full"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : "0px",
+        transition: "padding-bottom 0.3s ease-in-out",
+      }}
+    >
       <Tiptap
         content={initialState?.content || ""}
-        className={`min-w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar`}
+        className={`w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar pb-13`}
         setValue={setContent}
         setWordCount={setWordCount}
       />
@@ -117,6 +169,10 @@ function Slate() {
         className={`absolute bottom-0 right-0 mb-2 flex flex-row px-4 text-smoke text-sm justify-end pb-1 ${
           wordCountShown ? "opacity-100" : "opacity-0"
         }`}
+        style={{
+          bottom: keyboardHeight > 0 ? `${keyboardHeight}px` : "0px",
+          transition: "bottom 0.3s ease-in-out",
+        }}
       >
         <div className="flex flex-col">{wordCount} words</div>
       </div>

@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   private allowGuest(context: ExecutionContext) {
-    console.log('Allowing guest access');
     const request = context.switchToHttp().getRequest();
     request.user = null;
     return true;
@@ -61,7 +60,6 @@ export class AuthGuard implements CanActivate {
         }
       }
 
-      console.log('not allowing guest', decodedToken);
       request.user = decodedToken;
     } catch (error) {
       if (isPublic || guestToken) return this.allowGuest(context);

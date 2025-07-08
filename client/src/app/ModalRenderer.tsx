@@ -1,5 +1,6 @@
 import AuthModal from "@/components/modals/AuthModal";
 import ShareModal from "@/components/modals/ShareModal";
+import SlatesGridModal from "@/components/modals/SlatesGridModal";
 import { useGlobalStore } from "@/utils/zustand/globalStore";
 import { AnimatePresence } from "motion/react";
 import React from "react";
@@ -14,6 +15,7 @@ function ModalRenderer() {
         <>
           {modal === "auth" && <AuthModal close={() => closeModal()} />}
           {modal === "share" && <ShareModal close={() => closeModal()} />}
+          {modal === "slates" && <SlatesGridModal close={() => closeModal()} />}
         </>
       )}
     </AnimatePresence>

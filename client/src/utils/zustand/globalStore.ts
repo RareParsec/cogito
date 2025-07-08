@@ -9,11 +9,13 @@ export const useGlobalStore = create(
       theme: null as Themes | null,
       wordCountShown: false,
       leftSidebarOpen: true,
-      rightSidebarOpen: true,
+      rightSidebarOpen: false,
 
-      sidebarActivationWidth: 218,
+      sidebarActivationWidth: 200,
 
-      modalOpen: null as "auth" | "share" | null,
+      latestUpdatedSlateId: null as string | null,
+
+      modalOpen: null as "auth" | "share" | "slates" | null,
     },
     (set) => ({
       setTheme(theme: "light" | "dark") {
@@ -43,7 +45,7 @@ export const useGlobalStore = create(
       setRightSidebarOpen(open: boolean) {
         set({ rightSidebarOpen: open });
       },
-      setModalOpen(modal: "auth" | "share" | null) {
+      setModalOpen(modal: "auth" | "share" | "slates" | null) {
         set({ modalOpen: modal });
       },
       closeModal() {
@@ -51,6 +53,9 @@ export const useGlobalStore = create(
       },
       setSidebarActivationWidth(width: number) {
         set({ sidebarActivationWidth: width });
+      },
+      setLatestUpdatedSlateId(slateId: string | null) {
+        set({ latestUpdatedSlateId: slateId });
       },
     })
   )

@@ -48,7 +48,7 @@ const Tiptap = ({
     editorProps: {
       attributes: {
         class:
-          "tiptap break-words break-all outline-none h-fit min-h-full pt-15 px-[10%]",
+          "tiptap outline-none h-fit min-h-full pt-15 px-[10%] max-md:px-6 max-md:pt-18",
         spellcheck: "false",
       },
     },

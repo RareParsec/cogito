@@ -19,12 +19,15 @@ export class SlateService {
   ) {
     try {
       const slatesToReturn = await this.prisma.$transaction(async (tx) => {
-        const key = parseInt(
-          (user?.uid || guestTokenReceived || '')
-            .replace(/-/g, '')
-            .slice(0, 12),
-          16,
-        );
+        const key = (() => {
+          let h = 0x811c9dc5;
+          const str = user?.uid || guestTokenReceived || '';
+          for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 0x01000193);
+          }
+          return h >>> 0;
+        })();
 
         await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(${key})`);
 
@@ -62,6 +65,7 @@ export class SlateService {
       });
       return slatesToReturn;
     } catch (e) {
+      console.error('Error fetching slates:', e);
       if (e instanceof HttpException) throw e;
       throw new InternalServerErrorException(
         'Oops! Trouble loading your slates. Try again?',

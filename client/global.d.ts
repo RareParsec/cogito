@@ -1,7 +1,6 @@
 type User = {
-  id: string;
+  uid: string;
   email: string;
-  createdAt: string;
 };
 
 type Slate = {
