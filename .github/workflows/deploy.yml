@@ -19,7 +19,7 @@ jobs:
           username: ${{secrets.USERNAME}}
           key: ${{secrets.SSH_KEY}}
           script: |
-            cd /home/rared/api
+            cd /home/rared/cogito/api
 
             cat > .env << EOF
             NEST_API_PORT=${{ secrets.NEST_API_PORT }}
