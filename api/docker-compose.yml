@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   nest-api:
     build:
@@ -12,11 +11,10 @@ services:
       - PORT=3000
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:
-      - postgres:
-          condition: service_healthy
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
-
-
+    
   postgres:
     image: postgres:latest
     ports:
@@ -33,7 +31,6 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-
 
 volumes:
   postgres_data:
