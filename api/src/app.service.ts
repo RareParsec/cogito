@@ -7,6 +7,6 @@ export class AppService {
   }
 
   getDeploymentStatus(): string {
-    return 'Deployed 3rd try...';
+    return 'im so done, this is like 10th deployment attempt...';
   }
 }
