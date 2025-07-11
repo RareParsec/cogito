@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private prisma: PrismaService,
-    private readonly authService: AuthService, // Assuming AuthService is used for user-related operations
+    private readonly authService: AuthService,
   ) {}
 
   private allowGuest(context: ExecutionContext) {
