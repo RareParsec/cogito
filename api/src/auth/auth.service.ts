@@ -6,7 +6,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 import { PrismaService } from 'src/common/prisma.service';
 
@@ -45,7 +44,7 @@ export class AuthService {
     }
   }
 
-  private async createUser(user: DecodedIdToken, tx: Prisma.TransactionClient) {
+  private async createUser(user: DecodedIdToken, tx) {
     try {
       if (!user.email) {
         throw new BadRequestException('Please provide an email to continue!');
