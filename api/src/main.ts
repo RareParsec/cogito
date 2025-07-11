@@ -10,6 +10,9 @@ async function bootstrap() {
     // allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
+  console.log(
+    `Nest API is running on port ${process.env.NEST_API_PORT || 3000}`,
+  );
   await app.listen(process.env.NEST_API_PORT || 3000);
 }
 bootstrap();

@@ -8,7 +8,7 @@ services:
       - "${NEST_API_PORT}:3000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - NEST_API_PORT=${NEST_API_PORT}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:
       postgres:
