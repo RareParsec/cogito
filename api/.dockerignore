@@ -1,0 +1,12 @@
+node_modules
+dist
+generated
+test
+.env
+.gitignore
+.prettierrc
+README.md
+tsconfig*
+.git
+Dockerfile
+.dockerignore
