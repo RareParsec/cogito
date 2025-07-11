@@ -10,6 +10,7 @@ services:
       - NODE_ENV=production
       - NEST_API_PORT=${NEST_API_PORT}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY}
     depends_on:
       postgres:
         condition: service_healthy
