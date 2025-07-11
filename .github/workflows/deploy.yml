@@ -19,7 +19,7 @@ jobs:
           username: ${{secrets.USERNAME}}
           key: ${{secrets.SSH_KEY}}
           script: |
-            cd /home/cogito/api
+            cd /home/rared/api
 
             cat > .env << EOF
             NEST_API_PORT=${{ secrets.NEST_API_PORT }}
@@ -35,6 +35,6 @@ jobs:
             docker-compose down
             docker-compose up -d --build
 
-            docker-compose exec -T nest_api npx prisma migrate deploy
+            docker-compose exec -T nest-api npx prisma migrate deploy
 
             docker-compose ps
