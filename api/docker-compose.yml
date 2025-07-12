@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${HOST_PORT}:{NEST_API_PORT}"
+      - "${HOST_PORT}:${NEST_API_PORT}"
     environment:
       - NODE_ENV=production
       - NEST_API_PORT=${NEST_API_PORT}
