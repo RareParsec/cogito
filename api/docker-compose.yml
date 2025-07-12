@@ -4,12 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    network_mode: host
     ports:
       - "${HOST_PORT}:${NEST_API_PORT}"
     environment:
       - NODE_ENV=production
       - NEST_API_PORT=${NEST_API_PORT}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@172.17.0.1:${POSTGRES_PORT}/${POSTGRES_DB}
       - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY}
     restart: unless-stopped
