@@ -23,6 +23,7 @@ jobs:
 
             cat > .env << EOF
             NEST_API_PORT=${{ secrets.NEST_API_PORT }}
+            HOST_PORT=${{secrets.HOST_PORT}}
             FIREBASE_SERVICE_ACCOUNT_KEY=${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
             NODE_ENV=production
             POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
