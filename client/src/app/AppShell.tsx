@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useGlobalStore } from "@/utils/zustand/globalStore";
 import ModalRenderer from "./ModalRenderer";
 import SidebarLeft from "@/components/appshell/SidebarLeft";

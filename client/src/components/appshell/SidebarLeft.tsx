@@ -17,7 +17,7 @@ import SidebarWrapper from "./SidebarWrapper";
 import Menu from "./Menu";
 import deleteSlate from "@/utils/deleteSlate";
 import renameSlate from "@/utils/renameSlate";
-import { LongPressCallbackMeta, useLongPress } from "use-long-press";
+import { useLongPress } from "use-long-press";
 
 function SidebarLeft() {
   const [slates, setSlates] = useState<Array<SlateMinimal>>([]);

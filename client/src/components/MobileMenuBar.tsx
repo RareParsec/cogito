@@ -1,10 +1,8 @@
 import { useGlobalStore } from "@/utils/zustand/globalStore";
-import { DotsThreeIcon, ListIcon, SidebarIcon } from "@phosphor-icons/react";
+import { ListIcon, SidebarIcon } from "@phosphor-icons/react";
 import React from "react";
 
 function MobileMenuBar() {
-  if (window.innerWidth >= 480) return null;
-
   const setLeftSidebarOpen = useGlobalStore(
     (state) => state.setLeftSidebarOpen
   );
@@ -12,6 +10,8 @@ function MobileMenuBar() {
   const setRightSidebarOpen = useGlobalStore(
     (state) => state.setRightSidebarOpen
   );
+
+  if (window.innerWidth >= 480) return null;
 
   return (
     <div className="fixed top-0 left-0 right-0 flex flex-row justify-between backdrop-blur-[1px] z-10">

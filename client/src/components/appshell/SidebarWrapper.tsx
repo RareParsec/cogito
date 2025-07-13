@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useGlobalStore } from "@/utils/zustand/globalStore";
 
@@ -20,7 +20,7 @@ function SidebarWrapper({
     (state) => state.sidebarActivationWidth
   );
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 480);
+  const isMobile = window.innerWidth < 480;
 
   return (
     <div

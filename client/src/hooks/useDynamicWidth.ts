@@ -1,5 +1,5 @@
 import { useGlobalStore } from "@/utils/zustand/globalStore";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 export const useDynamicSidebarWidth = (customRatio = 2.5) => {
   const setSidebarActivationWidth = useGlobalStore(
