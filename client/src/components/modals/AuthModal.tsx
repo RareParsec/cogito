@@ -7,7 +7,6 @@ import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "@/config/firebase";
 import customAxios from "@/config/axios";
 import errorHandler from "@/utils/errorHandler";
-import { useUserStore } from "@/utils/zustand/userStore";
 import { useGlobalStore } from "@/utils/zustand/globalStore";
 const AuthModal = ({ close }: { close: () => void }) => {
   const toggleTriggerSlatesRefetch = useGlobalStore(
@@ -22,7 +21,7 @@ const AuthModal = ({ close }: { close: () => void }) => {
       return errorHandler(e, toastId);
     }
     try {
-      const res = await customAxios.get("/auth/continueWithGoogle", {
+      await customAxios.get("/auth/continueWithGoogle", {
         headers: { ForceTokenRefresh: true },
       });
       toast.success("Successfully signed in", { id: toastId });
