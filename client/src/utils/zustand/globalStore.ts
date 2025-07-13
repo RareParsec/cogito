@@ -16,6 +16,8 @@ export const useGlobalStore = create(
       latestUpdatedSlateId: null as string | null,
 
       modalOpen: null as "auth" | "share" | "slates" | null,
+
+      triggerSlatesRefetch: false,
     },
     (set) => ({
       setTheme(theme: "light" | "dark") {
@@ -56,6 +58,9 @@ export const useGlobalStore = create(
       },
       setLatestUpdatedSlateId(slateId: string | null) {
         set({ latestUpdatedSlateId: slateId });
+      },
+      toggleTriggerSlatesRefetch() {
+        set((state) => ({ triggerSlatesRefetch: !state.triggerSlatesRefetch }));
       },
     })
   )

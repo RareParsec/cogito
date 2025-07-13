@@ -11,6 +11,7 @@ type Slate = {
   updatedAt: string;
   shared: boolean;
   authorId: string;
+  viewing?: boolean;
 };
 
 type SlateMinimal = {

@@ -276,6 +276,7 @@ export class SlateService {
 
       return updatedSlate;
     } catch (e) {
+      console.log(e);
       if (e instanceof HttpException) throw e;
       throw new InternalServerErrorException(
         'Trouble transferring slate. Try again!',

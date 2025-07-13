@@ -21,16 +21,19 @@ const Tiptap = ({
   className,
   style,
   content,
+  viewing = false,
   setValue,
   setWordCount,
 }: {
   className?: string;
   style?: React.CSSProperties;
   content: Content;
+  viewing?: boolean;
   setValue?: (value: Content) => void;
   setWordCount: (count: number) => void;
 }) => {
   const editor = useEditor({
+    editable: !viewing,
     extensions: [
       StarterKit,
       // StarterKit.configure({

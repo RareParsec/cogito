@@ -18,6 +18,7 @@ import Menu from "./Menu";
 import deleteSlate from "@/utils/deleteSlate";
 import renameSlate from "@/utils/renameSlate";
 import { useLongPress } from "use-long-press";
+import { generateUUID } from "@/utils/generateUUID";
 
 function SidebarLeft() {
   const [slates, setSlates] = useState<Array<SlateMinimal>>([]);
@@ -38,6 +39,10 @@ function SidebarLeft() {
   const setModal = useGlobalStore((state) => state.setModalOpen);
   const latestUpdatedSlateId = useGlobalStore(
     (state) => state.latestUpdatedSlateId
+  );
+
+  const truggerSlatesRefetch = useGlobalStore(
+    (state) => state.triggerSlatesRefetch
   );
 
   const modal = useGlobalStore((state) => state.modalOpen);
@@ -114,7 +119,7 @@ function SidebarLeft() {
       try {
         const guestToken = localStorage.getItem("guest-token");
         if (!guestToken && !user) {
-          localStorage.setItem("guest-token", crypto.randomUUID());
+          localStorage.setItem("guest-token", generateUUID());
         }
 
         const res = await customAxios.get("/slate/all");
@@ -127,7 +132,7 @@ function SidebarLeft() {
       }
     };
     fetchSlates();
-  }, [user]);
+  }, [user, truggerSlatesRefetch]);
 
   useLayoutEffect(() => {
     const firstSlateItem = document.getElementById("slate-item");
@@ -346,7 +351,10 @@ function SidebarLeft() {
             )}
             <button
               className="flex flex-row justify-center mx-2 px-[6px] py-[6px] border-dashed border-2 border-silver rounded-lg hover:bg-silver"
-              onClick={createNewSlate}
+              onClick={() => {
+                setHightlightSwitchedSlateId(null);
+                createNewSlate();
+              }}
             >
               <PlusIcon size={22} className="text-smoke" />
             </button>

@@ -161,12 +161,18 @@ function Slate() {
     >
       <Tiptap
         content={initialState?.content || ""}
+        viewing={initialState?.viewing || false}
         className={`w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar pb-13`}
         setValue={setContent}
         setWordCount={setWordCount}
       />
+      {initialState?.viewing && (
+        <div className="flex flex-row text-smoke/45 justify-center mb-18">
+          Viewing Mode.
+        </div>
+      )}
       <div
-        className={`absolute bottom-0 right-0 mb-2 flex flex-row px-4 text-smoke text-sm justify-end pb-1 ${
+        className={`absolute bottom-0 right-0 mb-3 flex flex-row px-4 text-smoke text-sm justify-end pb-1 ${
           wordCountShown ? "opacity-100" : "opacity-0"
         }`}
         style={{

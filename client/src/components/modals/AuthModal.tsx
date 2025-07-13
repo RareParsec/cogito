@@ -1,16 +1,19 @@
 "use client";
 import React from "react";
-import {
-  GoogleLogoIcon,
-  MinusIcon,
-} from "@phosphor-icons/react";
+import { GoogleLogoIcon, MinusIcon } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import toast from "react-hot-toast";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "@/config/firebase";
 import customAxios from "@/config/axios";
 import errorHandler from "@/utils/errorHandler";
+import { useUserStore } from "@/utils/zustand/userStore";
+import { useGlobalStore } from "@/utils/zustand/globalStore";
 const AuthModal = ({ close }: { close: () => void }) => {
+  const toggleTriggerSlatesRefetch = useGlobalStore(
+    (state) => state.toggleTriggerSlatesRefetch
+  );
+
   const handleGoogleAuth = async () => {
     const toastId = toast.loading("Loading...");
     try {
@@ -19,10 +22,12 @@ const AuthModal = ({ close }: { close: () => void }) => {
       return errorHandler(e, toastId);
     }
     try {
-      await customAxios.get("/auth/continueWithGoogle", {
+      const res = await customAxios.get("/auth/continueWithGoogle", {
         headers: { ForceTokenRefresh: true },
       });
       toast.success("Successfully signed in", { id: toastId });
+
+      toggleTriggerSlatesRefetch();
       close();
     } catch (e) {
       signOut(auth);
