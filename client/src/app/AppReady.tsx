@@ -18,6 +18,10 @@ function AppReady({ children }: { children: React.ReactNode }) {
   const setUser = useUserStore((state) => state.setUser);
   const clearUser = useUserStore((state) => state.clearUser);
 
+  const toggleTriggerSlatesRefetch = useGlobalStore(
+    (state) => state.toggleTriggerSlatesRefetch
+  );
+
   useEffect(() => {
     const currentTheme = localStorage.getItem("theme");
     setTheme(
@@ -45,6 +49,7 @@ function AppReady({ children }: { children: React.ReactNode }) {
             );
 
             localStorage.removeItem("guest-token");
+            toggleTriggerSlatesRefetch();
           } catch (e) {
             errorHandler(e);
           }
