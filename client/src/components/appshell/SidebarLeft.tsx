@@ -41,7 +41,7 @@ function SidebarLeft() {
     (state) => state.latestUpdatedSlateId
   );
 
-  const truggerSlatesRefetch = useGlobalStore(
+  const triggerSlatesRefetch = useGlobalStore(
     (state) => state.triggerSlatesRefetch
   );
 
@@ -133,7 +133,7 @@ function SidebarLeft() {
       }
     };
     fetchSlates();
-  }, [user, truggerSlatesRefetch]);
+  }, [user, triggerSlatesRefetch]);
 
   useLayoutEffect(() => {
     const firstSlateItem = document.getElementById("slate-item");

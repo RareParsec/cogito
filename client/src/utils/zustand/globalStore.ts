@@ -3,15 +3,13 @@ import { combine } from "zustand/middleware";
 
 type Themes = "light" | "dark";
 
-const isMobile = window.innerWidth < 480;
-
 export const useGlobalStore = create(
   combine(
     {
       theme: null as Themes | null,
       wordCountShown: false,
-      leftSidebarOpen: isMobile ? false : true,
-      rightSidebarOpen: isMobile ? false : true,
+      leftSidebarOpen: false,
+      rightSidebarOpen: false,
 
       sidebarActivationWidth: 200,
 

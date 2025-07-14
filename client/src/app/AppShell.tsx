@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGlobalStore } from "@/utils/zustand/globalStore";
 import ModalRenderer from "./ModalRenderer";
 import SidebarLeft from "@/components/appshell/SidebarLeft";
@@ -12,7 +12,22 @@ function AppShell({ children }: { children: React.ReactNode }) {
     (state) => state.sidebarActivationWidth
   );
 
+  const isMobile = window.innerWidth < 480;
+  const setLeftSidebarOpen = useGlobalStore(
+    (state) => state.setLeftSidebarOpen
+  );
+  const setRightSidebarOpen = useGlobalStore(
+    (state) => state.setRightSidebarOpen
+  );
+
   useDynamicSidebarWidth(0.8);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setLeftSidebarOpen(true);
+      setRightSidebarOpen(true);
+    }
+  }, []);
 
   return (
     <div
