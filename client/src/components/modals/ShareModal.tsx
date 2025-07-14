@@ -24,7 +24,7 @@ const ShareModal = ({ close }: { close: () => void }) => {
 
       if (res.data.shared) {
         toast.success(
-          "Document is now shared! Anyone with the link can edit.",
+          "Document is now shared! Anyone with the link can view it.",
           { id: toastId }
         );
 
@@ -84,7 +84,7 @@ const ShareModal = ({ close }: { close: () => void }) => {
         <div className="mb-6">
           <p className="text-sm text-smoke text-center">
             {isShared
-              ? "Anyone with the link can edit this document. Click to make it private."
+              ? "Anyone with the link can view this document. Click to make it private."
               : "Allow anyone with the link to edit this document."}
           </p>
         </div>

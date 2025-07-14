@@ -45,7 +45,7 @@ const Tiptap = ({
       // }),
       CustomUnderline,
       Placeholder.configure({
-        placeholder: "Write...",
+        placeholder: `Write here...`,
       }),
     ],
     editorProps: {

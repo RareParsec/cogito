@@ -6,18 +6,20 @@
   --color-background: var(--color-cloud);
   --color-foreground: var(--color-graphite);
 
-  --color-graphite: #363636;
-  --color-smoke: #888888;
-  --color-ash: #d4d4d4;
-  --color-silver: #e0e0e0;
-  --color-mist: #ebebeb;
-  --color-cloud: #f5f5f5;
-  --color-ivory: #fdfcf9;
-  --color-roseRed: #9f0712;
-  --color-moss: #4caf50;
-  --color-honeyGlow: #bf9517;
-}
+  /* Greyscale */
+  --color-graphite: #2d3748; /* Darker for stronger text */
+  --color-smoke: #718096;
+  --color-ash: #cbd5e0;
+  --color-silver: #e2e8f0;
+  --color-mist: #edf2f7;
+  --color-cloud: #f7fafc; /* Slightly cooler white */
+  --color-ivory: #ffffff;
 
+  /* Accent Colors */
+  --color-roseRed: #c53030;
+  --color-moss: #2f855a;
+  --color-honeyGlow: #c05621;
+}
 @theme {
   --breakpoint-*: initial;
   --breakpoint-sm: 22.5rem;
@@ -28,16 +30,18 @@
 
 /* DARK THEME OVERRIDES */
 .dark {
-  --color-graphite: #c9c9c9;
-  --color-smoke: #9b9bb7;
-  --color-ash: #363650;
-  --color-silver: #2a2a3d;
-  --color-mist: #1e1e30;
-  --color-cloud: #16162a;
-  --color-ivory: #2d2d44;
-  --color-roseRed: #f7768e;
-  --color-moss: #9ece6a;
-  --color-honeyGlow: #e0af68;
+  --color-graphite: #e2e8f0; /* Lighter text for dark bg */
+  --color-smoke: #a0aec0;
+  --color-ash: #384252;
+  --color-silver: #2d3748;
+  --color-mist: #1a202c;
+  --color-cloud: #171923; /* A soft, deep off-black */
+  --color-ivory: #2d3748;
+
+  /* Vibrant Accent Colors for Dark Mode */
+  --color-roseRed: #f56565;
+  --color-moss: #68d391;
+  --color-honeyGlow: #f6ad55;
 }
 
 /* BASE STYLES */
@@ -257,6 +261,14 @@
       float: left;
       height: 0;
       /* pointer-events: none; */
+    }
+
+    p.is-editor-empty:first-child::after {
+      content: "\A# Headings\A**Bold**\A*Italic*\A• Bulleted List\A...";
+      white-space: pre-line;
+      color: #999;
+      pointer-events: none;
+      opacity: 0.4;
     }
 
     /* li::marker {

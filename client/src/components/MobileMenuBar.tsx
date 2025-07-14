@@ -7,9 +7,13 @@ function MobileMenuBar() {
     (state) => state.setLeftSidebarOpen
   );
 
+  const leftSidebarOpen = useGlobalStore((state) => state.leftSidebarOpen);
+
   const setRightSidebarOpen = useGlobalStore(
     (state) => state.setRightSidebarOpen
   );
+
+  const rightSidebarOpen = useGlobalStore((state) => state.rightSidebarOpen);
 
   if (window.innerWidth >= 480) return null;
 
@@ -20,10 +24,15 @@ function MobileMenuBar() {
         onClick={() => {
           setLeftSidebarOpen(true);
         }}
+        disabled={leftSidebarOpen || rightSidebarOpen}
       >
         <ListIcon size={23} className="text-ash" />
       </button>
-      <button className="p-4 px-5" onClick={() => setRightSidebarOpen(true)}>
+      <button
+        className="p-4 px-5"
+        onClick={() => setRightSidebarOpen(true)}
+        disabled={rightSidebarOpen || leftSidebarOpen}
+      >
         <SidebarIcon size={23} className="text-ash" />
       </button>
     </div>

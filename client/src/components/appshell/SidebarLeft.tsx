@@ -103,6 +103,7 @@ function SidebarLeft() {
     },
     {
       captureEvent: false,
+      cancelOnMovement: true,
     }
   );
 
