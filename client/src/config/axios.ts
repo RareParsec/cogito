@@ -3,6 +3,7 @@ import { auth } from "./firebase";
 
 const customAxios = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
+  timeout: 5000,
 });
 
 customAxios.defaults.headers.post["Content-Type"] = "application/json";
