@@ -260,16 +260,19 @@
       color: #999;
       float: left;
       height: 0;
-      /* pointer-events: none; */
+      padding-left: 1px;
+      pointer-events: none;
+      transform: translate(0, 1px);
     }
 
-    p.is-editor-empty:first-child::after {
+    /* p.is-editor-empty:first-child::after {
       content: "\A# Headings\A**Bold**\A*Italic*\A• Bulleted List\A...";
       white-space: pre-line;
       color: #999;
       pointer-events: none;
       opacity: 0.4;
-    }
+      display: none;
+    } */
 
     /* li::marker {
       color: var(--color-graphite);

@@ -85,7 +85,7 @@ const ShareModal = ({ close }: { close: () => void }) => {
           <p className="text-sm text-smoke text-center">
             {isShared
               ? "Anyone with the link can view this document. Click to make it private."
-              : "Allow anyone with the link to edit this document."}
+              : "Allow anyone with the link to view this document."}
           </p>
         </div>
 

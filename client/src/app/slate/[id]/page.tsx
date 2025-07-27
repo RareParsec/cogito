@@ -162,7 +162,7 @@ function Slate() {
       <Tiptap
         content={initialState?.content || ""}
         viewing={initialState?.viewing || false}
-        className={`w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar pb-13`}
+        className={`w-full overflow-scroll flex-grow outline-none leading-snug no-scrollbar pb-13 caret-graphite `}
         setValue={setContent}
         setWordCount={setWordCount}
       />
